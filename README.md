@@ -1,16 +1,30 @@
-# fit_finder
+# FitFinder 
 
-A new Flutter project.
+O **FitFinder** é um aplicativo mobile que permite ao usuário buscar, visualizar e simular contato com personal trainers, com a intenção de contratação futura.
 
-## Getting Started
+O app será desenvolvido com foco em:
+- Boas práticas de arquitetura  
+- Organização de camadas  
+- Consumo de API REST  
+- Manipulação eficiente de dados  
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Funcionalidades  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Busca de personal trainers  
+- Visualização de perfis  
+- Simulação de contato  
+- Integração com API REST para listagem e detalhes  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Tecnologias  
+
+-  
+
+---
+
+## Licença  
+
+Este projeto está sob a licença MIT.
