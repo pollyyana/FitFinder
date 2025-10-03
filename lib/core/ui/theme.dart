@@ -106,18 +106,18 @@ class AppTheme {
     );
   }
 
-  static ThemeData get darkTheme {
-    return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: primaryColor,
-        brightness: Brightness.dark,
-        primary: primaryColor,
-        secondary: secondaryColor,
-        tertiary: accentColor,
-        surface: const Color(0xff1E293B),
-        error: errorColor,
-      ),
-      scaffoldBackgroundColor: Color(0xff0F172A),
-    );
-  }
+  //   static ThemeData get darkTheme {
+  //     return ThemeData(
+  //       colorScheme: ColorScheme.fromSeed(
+  //         seedColor: primaryColor,
+  //         brightness: Brightness.dark,
+  //         primary: primaryColor,
+  //         secondary: secondaryColor,
+  //         tertiary: accentColor,
+  //         surface: const Color(0xff1E293B),
+  //         error: errorColor,
+  //       ),
+  //       scaffoldBackgroundColor: Color(0xff0F172A),
+  //     );
+  //   }
 }
