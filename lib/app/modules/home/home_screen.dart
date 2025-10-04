@@ -204,14 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final personal = controller.personals[index];
-                        return Cardt(
-                          nome: personal.name,
-                          telefone: personal.whatsapp,
-                          imagem: personal.photoUrl ?? '',
-                          bio: personal.bio,
-                          rating: personal.rating ?? 0,
-                          price: personal.price.toInt(),
-                        );
+                        return Cardt(personal: personal);
                       },
                     ),
                   const SizedBox(height: 16),

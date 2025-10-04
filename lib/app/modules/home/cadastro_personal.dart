@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CadastroPersonal extends StatefulWidget {
-  const CadastroPersonal({super.key});
+  final PersonalModel? personal;
+  const CadastroPersonal({super.key, this.personal});
 
   @override
   State<CadastroPersonal> createState() => _CadastroPersonalState();
@@ -25,6 +26,16 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
   @override
   void initState() {
     super.initState();
+
+    // Preenche os campos se estiver editando
+    if (widget.personal != null) {
+      _controllers['name']!.text = widget.personal!.name;
+      _controllers['bio']!.text = widget.personal!.bio;
+      _controllers['photoUrl']!.text = widget.personal!.photoUrl ?? '';
+      _controllers['whatsapp']!.text = widget.personal!.whatsapp;
+      _controllers['price']!.text = widget.personal!.price.toString();
+    }
+
     for (var controller in _controllers.values) {
       controller.addListener(() {
         setState(() {}); // atualiza preview
@@ -42,21 +53,29 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
 
   void _savePersonal() {
     if (_formKey.currentState!.validate()) {
-      final newPersonal = PersonalModel(
-        id: 0,
+      final personal = PersonalModel(
+        id: widget.personal?.id ?? 0,
         name: _controllers['name']!.text,
         bio: _controllers['bio']!.text,
         photoUrl: _controllers['photoUrl']?.text ?? '',
         whatsapp: _controllers['whatsapp']!.text,
         price: double.tryParse(_controllers['price']!.text) ?? 0,
-        rating: 0,
-        specialties: [],
+        rating: widget.personal?.rating ?? 0,
+        specialties: widget.personal?.specialties ?? [],
       );
 
-      Provider.of<PersonalController>(
+      final controller = Provider.of<PersonalController>(
         context,
         listen: false,
-      ).addPersonal(newPersonal);
+      );
+
+      if (widget.personal != null) {
+        // Editando
+        controller.updatePersonal(personal);
+      } else {
+        // Criando novo
+        controller.addPersonal(personal);
+      }
 
       Navigator.pop(context);
     }
@@ -91,7 +110,11 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Novo Personal')),
+      appBar: AppBar(
+        title: Text(
+          widget.personal != null ? 'Editar Personal' : 'Novo Personal',
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -116,13 +139,16 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
               const SizedBox(height: 10),
 
               Cardt(
-                nome: _controllers['name']!.text,
-                telefone: _controllers['whatsapp']!.text,
-                imagem: _controllers['photoUrl']?.text ?? '',
-                bio: _controllers['bio']!.text,
-                rating: 0,
-                price:
-                    double.tryParse(_controllers['price']!.text)?.toInt() ?? 0,
+                personal: PersonalModel(
+                  id: 0,
+                  name: _controllers['name']!.text,
+                  bio: _controllers['bio']!.text,
+                  photoUrl: _controllers['photoUrl']?.text ?? '',
+                  whatsapp: _controllers['whatsapp']!.text,
+                  price: double.tryParse(_controllers['price']!.text) ?? 0,
+                  rating: 0,
+                  specialties: [],
+                ),
               ),
 
               const SizedBox(height: 20),
