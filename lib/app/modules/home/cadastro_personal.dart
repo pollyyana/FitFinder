@@ -115,7 +115,6 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
               ),
               const SizedBox(height: 10),
 
-              // Cardt preview
               Cardt(
                 nome: _controllers['name']!.text,
                 telefone: _controllers['whatsapp']!.text,

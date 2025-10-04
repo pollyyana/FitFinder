@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fit_finder/app/app_widget.dart';
-import 'package:fit_finder/app/core/dio_connection.dart';
+import 'package:fit_finder/app/core/service/dio_connection.dart';
 import 'package:fit_finder/app/pages/controllers/personal_controller.dart';
 import 'package:fit_finder/app/repositories/personal_repository.dart';
 import 'package:flutter/material.dart';
