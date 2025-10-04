@@ -1,5 +1,6 @@
-import 'package:fit_finder/core/controllers/personal_controller.dart';
-import 'package:fit_finder/pages/modules/home/cadastro_personal.dart';
+import 'package:fit_finder/app/modules/home/cadastro_personal.dart';
+import 'package:fit_finder/app/modules/home/widgets/card_widget.dart';
+import 'package:fit_finder/app/pages/controllers/personal_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,18 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = Provider.of<PersonalController>(context);
-
-    if (controller.isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (controller.errorMessage.isNotEmpty) {
-      return Scaffold(
-        body: Center(child: Text(controller.errorMessage)),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -128,22 +117,103 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 15),
 
-                  ListView.builder(
-                    itemCount: controller.personals.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final personal = controller.personals[index];
-                      return Cardt(
-                        nome: personal.name,
-                        telefone: personal.whatsapp,
-                        imagem: personal.photoUrl ?? '',
-                        bio: personal.bio,
-                        rating: personal.rating ?? 0,
-                        price: personal.price.toInt(),
-                      );
-                    },
-                  ),
+                  // Seção dos personals
+                  if (controller.isLoading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (controller.errorMessage.isNotEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              size: 48,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Erro ao carregar personals',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red[700],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              controller.errorMessage,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.red[600],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                controller.getPersonal();
+                              },
+                              child: const Text('Tentar novamente'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else if (controller.personals.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.wifi_off,
+                              size: 48,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Servidor offline',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Conecte o servidor para ver os personals',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      itemCount: controller.personals.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final personal = controller.personals[index];
+                        return Cardt(
+                          nome: personal.name,
+                          telefone: personal.whatsapp,
+                          imagem: personal.photoUrl ?? '',
+                          bio: personal.bio,
+                          rating: personal.rating ?? 0,
+                          price: personal.price.toInt(),
+                        );
+                      },
+                    ),
                   const SizedBox(height: 16),
 
                   ElevatedButton.icon(
@@ -169,112 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class Cardt extends StatelessWidget {
-  final String nome;
-  final String telefone;
-  final String imagem;
-  final String bio;
-  final double rating;
-  final int price;
-
-  const Cardt({
-    super.key,
-    required this.nome,
-    required this.telefone,
-    required this.imagem,
-    required this.bio,
-    required this.rating,
-    required this.price,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 80,
-            width: 80,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                imagem,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.person, size: 40),
-                  );
-                },
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  nome,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  bio,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.amber, size: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      rating.toString(),
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    const SizedBox(width: 16),
-                    Icon(Icons.phone, color: Colors.green, size: 16),
-                    const SizedBox(width: 4),
-                    Text(telefone, style: const TextStyle(fontSize: 12)),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'R\$ $price/hora',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -1,20 +1,15 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:fit_finder/models/personal_model.dart';
+import 'package:fit_finder/app/models/personal_model.dart';
 import 'package:flutter/material.dart';
 
 class PersonalRepository extends ChangeNotifier {
-  Dio _dio;
+  final Dio _dio;
 
   PersonalRepository({required Dio dio}) : _dio = dio;
 
   Dio get dio => _dio;
-
-  set dio(Dio nDio) {
-    _dio = nDio;
-    notifyListeners();
-  }
 
   Future<List<PersonalModel>> getPersonal() async {
     try {
