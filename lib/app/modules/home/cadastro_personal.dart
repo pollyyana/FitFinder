@@ -1,10 +1,8 @@
-import 'package:fit_finder/core/controllers/personal_controller.dart';
-import 'package:fit_finder/models/personal_model.dart';
+import 'package:fit_finder/app/models/personal_model.dart';
+import 'package:fit_finder/app/modules/home/widgets/card_widget.dart';
+import 'package:fit_finder/app/pages/controllers/personal_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-// Certifique-se de que Cardt esteja importado ou definido no mesmo arquivo
-import 'home_screen.dart';
 
 class CadastroPersonal extends StatefulWidget {
   const CadastroPersonal({super.key});
@@ -27,7 +25,6 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
   @override
   void initState() {
     super.initState();
-    // Atualiza o Card preview em tempo real
     for (var controller in _controllers.values) {
       controller.addListener(() {
         setState(() {}); // atualiza preview
@@ -61,7 +58,7 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
         listen: false,
       ).addPersonal(newPersonal);
 
-      Navigator.pop(context); // volta para a HomeScreen
+      Navigator.pop(context);
     }
   }
 
@@ -102,7 +99,6 @@ class _CadastroPersonalState extends State<CadastroPersonal> {
           child: ListView(
             children: [
               _textField(keyName: 'name', label: 'Nome', isRequired: true),
-
               _textField(keyName: 'bio', label: 'Bio'),
               _textField(keyName: 'photoUrl', label: 'URL da Foto (opcional)'),
               _textField(keyName: 'whatsapp', label: 'WhatsApp'),

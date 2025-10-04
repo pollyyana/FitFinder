@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:fit_finder/core/repositories/personal_repository.dart';
+import 'package:fit_finder/app/repositories/personal_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/personal_model.dart';
@@ -25,8 +25,20 @@ class PersonalController extends ChangeNotifier {
       personals = await repository.getPersonal();
     } catch (e, s) {
       log('Erro ao buscar personals: $e', stackTrace: s);
-      errorMessage =
-          'Não foi possível carregar os personals. Tente novamente mais tarde.';
+      
+      // Se for erro de conexão, não mostra erro, apenas lista vazia
+      if (e is DioException) {
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.connectionError) {
+          personals = []; // Lista vazia quando servidor offline
+          errorMessage = ''; // Não mostra erro
+        } else {
+          errorMessage = 'Erro no servidor. Tente novamente mais tarde.';
+        }
+      } else {
+        errorMessage = 'Erro inesperado. Tente novamente mais tarde.';
+      }
     } finally {
       isLoading = false;
       notifyListeners();
