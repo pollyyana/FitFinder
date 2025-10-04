@@ -25,7 +25,7 @@ class PersonalController extends ChangeNotifier {
       personals = await repository.getPersonal();
     } catch (e, s) {
       log('Erro ao buscar personals: $e', stackTrace: s);
-      
+
       // Se for erro de conexão, não mostra erro, apenas lista vazia
       if (e is DioException) {
         if (e.type == DioExceptionType.connectionTimeout ||
@@ -50,13 +50,13 @@ class PersonalController extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Remove o ID do payload para deixar o servidor gerar automaticamente
+      //id automatico
       final personalData = personal.toMap();
       personalData.remove('id');
 
       final response = await repository.dio.post(
         '/personal',
-        data: jsonEncode(personalData), // <- aqui converte para JSON
+        data: jsonEncode(personalData),
         options: Options(
           headers: {'Content-Type': 'application/json'},
         ),

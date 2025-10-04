@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fit_finder/app/models/personal_model.dart';
+import 'package:flutter/material.dart';
 
 class DescricaoPage extends StatelessWidget {
   final PersonalModel personal;
@@ -20,7 +20,6 @@ class DescricaoPage extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            // Card com imagem e nome
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
@@ -30,7 +29,7 @@ class DescricaoPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      height: 100,
+                      height: 200,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
