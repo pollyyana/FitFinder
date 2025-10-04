@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:fit_finder/core/repositories/personal_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -36,16 +38,29 @@ class PersonalController extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
+      // Remove o ID do payload para deixar o servidor gerar automaticamente
+      final personalData = personal.toMap();
+      personalData.remove('id');
+
       final response = await repository.dio.post(
         '/personal',
-        data: personal.toMap(),
+        data: jsonEncode(personalData), // <- aqui converte para JSON
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
       );
 
       personals.add(PersonalModel.fromMap(response.data));
     } catch (e, s) {
       log('Erro ao adicionar personal: $e', stackTrace: s);
-      errorMessage =
-          'Não foi possível adicionar o personal. Tente novamente mais tarde.';
+
+      if (e is DioException && e.response != null) {
+        errorMessage =
+            'Erro ao adicionar personal: ${e.response?.statusCode} - ${e.response?.data}';
+      } else {
+        errorMessage =
+            'Não foi possível adicionar o personal. Tente novamente mais tarde.';
+      }
     } finally {
       isLoading = false;
       notifyListeners();

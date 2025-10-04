@@ -11,7 +11,6 @@ class PersonalRepository extends ChangeNotifier {
 
   Dio get dio => _dio;
 
-  // Setter do Dio
   set dio(Dio nDio) {
     _dio = nDio;
     notifyListeners();

@@ -1,4 +1,5 @@
 import 'package:fit_finder/core/controllers/personal_controller.dart';
+import 'package:fit_finder/pages/modules/home/cadastro_personal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Chama o controller para buscar os personals
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<PersonalController>(context, listen: false).getPersonal();
     });
@@ -61,16 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Campo de pesquisa + botão
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 5,
+                    color: Colors.grey.withOpacity(0.1),
+                    blurRadius: 0,
                   ),
                 ],
               ),
@@ -139,22 +137,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Cardt(
                         nome: personal.name,
                         telefone: personal.whatsapp,
-                        imagem: personal.photoUrl,
+                        imagem: personal.photoUrl ?? '',
                         bio: personal.bio,
-                        rating: personal.rating,
+                        rating: personal.rating ?? 0,
                         price: personal.price.toInt(),
                       );
                     },
                   ),
                   const SizedBox(height: 16),
 
-                  // Botão para adicionar novos personals
                   ElevatedButton.icon(
                     onPressed: () {
-                      // Aqui você pode abrir um modal ou rota para adicionar novo personal
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CadastroPersonal(),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text('Adicionar Personal'),
+                    label: const Text('Novo Personal'),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                       shape: RoundedRectangleBorder(

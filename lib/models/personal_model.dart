@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 class PersonalModel {
-  final String id;
+  final int id;
   final String name;
   final String bio;
   final List<String> specialties;
-  final double rating;
-  final String city;
-  final String state;
-  final String photoUrl;
+  final double? rating;
+  final String? photoUrl;
   final String whatsapp;
   final double price;
   PersonalModel({
@@ -16,10 +14,8 @@ class PersonalModel {
     required this.name,
     required this.bio,
     required this.specialties,
-    required this.rating,
-    required this.city,
-    required this.state,
-    required this.photoUrl,
+    this.rating,
+    this.photoUrl,
     required this.whatsapp,
     required this.price,
   });
@@ -31,8 +27,6 @@ class PersonalModel {
       'bio': bio,
       'specialties': specialties,
       'rating': rating,
-      'city': city,
-      'state': state,
       'photoUrl': photoUrl,
       'whatsapp': whatsapp,
       'price': price,
@@ -41,14 +35,12 @@ class PersonalModel {
 
   factory PersonalModel.fromMap(Map<String, dynamic> map) {
     return PersonalModel(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       name: map['name'] ?? '',
       bio: map['bio'] ?? '',
       specialties: List<String>.from(map['specialties'] ?? const []),
-      rating: map['rating']?.toDouble() ?? 0.0,
-      city: map['city'] ?? '',
-      state: map['state'] ?? '',
-      photoUrl: map['photoUrl'] ?? '',
+      rating: map['rating']?.toDouble(),
+      photoUrl: map['photoUrl'],
       whatsapp: map['whatsapp'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
     );
